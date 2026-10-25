@@ -4,6 +4,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var model = AppModel()
     @State private var settings = AppSettings()
+    @State private var store = BusinessStore()
     @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
 
     private var noMotion: Bool { settings.reduceMotion || systemReduceMotion }
@@ -23,6 +24,7 @@ struct ContentView: View {
         }
         .id(settings.colorVersion)                       // redraw when color-blind mode changes
         .environment(settings)
+        .environment(store)
         .tint(Theme.brand)
         .preferredColorScheme(settings.appearance.colorScheme)
         .dynamicTypeSize(settings.textSize.range)

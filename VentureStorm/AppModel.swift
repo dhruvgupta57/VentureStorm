@@ -33,6 +33,24 @@ final class AppModel {
 
     var path: [Route] = []
 
+    /// The saved business being worked on, if any. Saving again updates it.
+    var currentBusinessID: UUID?
+
+    /// Loads a saved business into Build so the student can rerun or change it.
+    func open(_ business: SavedBusiness) {
+        idea = business.idea
+        assumptions = business.plan
+        sources = [:]
+        draftSummary = nil
+        report = nil
+        beforeFix = nil
+        appliedFixTitle = nil
+        resetCoach()
+        currentBusinessID = business.id
+        buildStep = 1
+        path = []
+    }
+
     /// Groq when a key is set (Secrets.swift or Settings), otherwise the offline templates.
     var ai: any VentureAI {
         if let key = KeychainStore.currentKey() { return GroqAI(apiKey: key) }

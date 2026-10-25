@@ -33,7 +33,7 @@ struct SeededRNG: RandomNumberGenerator {
 // MARK: - Price sensitivity
 
 /// How strongly customers react to price changes (price elasticity of demand).
-enum PriceSensitivity: String, CaseIterable, Identifiable {
+enum PriceSensitivity: String, CaseIterable, Identifiable, Codable {
     case low, medium, high
 
     var id: String { rawValue }
@@ -79,7 +79,7 @@ enum NumberSource: Equatable {
     case starterGuess(reason: String)   // filled in by the offline templates
 }
 
-struct Assumptions: Equatable {
+struct Assumptions: Equatable, Codable {
     var price: Double = 20                 // what you charge per item
     var unitCost: Double = 8               // what each item costs you to make/buy
     var fixedMonthlyCost: Double = 300     // costs you pay every month even with zero sales

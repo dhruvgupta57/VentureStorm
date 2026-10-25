@@ -7,6 +7,7 @@ struct BuildView: View {
     @State private var goingForward = true
 
     @State private var showSettings = false
+    @State private var showBusinesses = false
     @Environment(AppSettings.self) private var settings
 
     private let stepCount = 6
@@ -47,6 +48,12 @@ struct BuildView: View {
         }) {
             SettingsView()
         }
+        .sheet(isPresented: $showBusinesses) {
+            BusinessListView { business in
+                model.open(business)
+                showBusinesses = false
+            }
+        }
     }
 
     // MARK: Header and footer
@@ -66,6 +73,15 @@ struct BuildView: View {
                 Text("Step \(step + 1) of \(stepCount)")
                     .font(.caption.weight(.bold))
                     .foregroundStyle(.secondary)
+                Button {
+                    showBusinesses = true
+                } label: {
+                    Image(systemName: "folder.fill")
+                        .font(.title3)
+                        .foregroundStyle(Theme.brand)
+                        .frame(width: 44, height: 44)
+                }
+                .accessibilityLabel("My businesses")
                 Button {
                     showSettings = true
                 } label: {

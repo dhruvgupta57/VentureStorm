@@ -4,6 +4,10 @@ import Charts
 /// Screen 3: results across 500 futures and the biggest driver.
 struct ResultsView: View {
     @Bindable var model: AppModel
+    @Environment(BusinessStore.self) private var store
+    @State private var askName = false
+    @State private var nameText = ""
+    @State private var savedNote: String?
 
     var body: some View {
         ZStack {
@@ -22,6 +26,44 @@ struct ResultsView: View {
         }
         .navigationTitle("Results")
         .navigationBarTitleDisplayMode(.inline)
+        .alert("Name this business", isPresented: $askName) {
+            TextField("Name", text: $nameText)
+            Button("Save") { save(name: nameText) }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Saved businesses are in the folder on the first screen. You can track real sales there.")
+        }
+    }
+
+    // MARK: Saving
+
+    private var currentName: String? {
+        model.currentBusinessID.flatMap { store.business($0)?.name }
+    }
+
+    private var saveLabel: String {
+        if let name = currentName { return "Save changes to \(name)" }
+        return "Save this business"
+    }
+
+    private func saveTapped() {
+        if currentName != nil {
+            save(name: currentName ?? "")
+        } else {
+            let idea = model.idea.trimmingCharacters(in: .whitespacesAndNewlines)
+            nameText = idea.isEmpty ? "My business" : String(idea.prefix(30))
+            askName = true
+        }
+    }
+
+    private func save(name: String) {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let id = store.save(name: trimmed.isEmpty ? "My business" : trimmed,
+                            idea: model.idea,
+                            plan: model.assumptions,
+                            existingID: model.currentBusinessID)
+        model.currentBusinessID = id
+        savedNote = "Saved. Open the folder on the first screen to track real sales."
     }
 
     @ViewBuilder
@@ -96,6 +138,19 @@ struct ResultsView: View {
                 Label("Run with a new seed", systemImage: "shuffle")
             }
             .buttonStyle(SecondaryButtonStyle())
+
+            Button {
+                saveTapped()
+            } label: {
+                Label(saveLabel, systemImage: "square.and.arrow.down")
+            }
+            .buttonStyle(SecondaryButtonStyle())
+
+            if let savedNote {
+                Label(savedNote, systemImage: "checkmark.circle.fill")
+                    .font(.footnote)
+                    .foregroundStyle(Theme.profit)
+            }
 
             Text("Seed \(r.seed). The same seed gives the same results.")
                 .font(.caption)
