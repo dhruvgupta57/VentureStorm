@@ -36,7 +36,7 @@ Also: light and dark mode, text size, color-blind friendly colors, reduce motion
 ## Run it
 
 1. Open `VentureStorm.xcodeproj` in Xcode (iOS 17+ target).
-2. Optional AI: copy `VentureStorm/Secrets.swift.example` to `VentureStorm/Secrets.swift` and paste a free key from console.groq.com. (`Secrets.swift` is in `.gitignore`.)
+2. Optional AI: copy `Secrets.swift.example` to `VentureStorm/Secrets.swift` and paste a free key from console.groq.com. (`Secrets.swift` is in `.gitignore`.)
    Without a key, create the same file with an empty string, or paste a key in the app's Settings.
 3. Pick an iPhone simulator and press Run.
 
