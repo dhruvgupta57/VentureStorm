@@ -4,7 +4,7 @@
 
 VentureStorm is an iPhone app that lets students model their own small business, run it through 500 possible futures, find which guess matters most, and learn how to fix it. Built for the 2026 Congressional App Challenge.
 
-**Demo video:** _add YouTube link here_
+
 
 ## The problem
 
